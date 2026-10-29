@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
 
 export default function Interests() {
   const [received, setReceived] = useState([]);
   const [sent, setSent] = useState([]);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const load = async () => {
     try {
@@ -35,39 +33,51 @@ export default function Interests() {
   };
 
   return (
-    <div className="card wide">
-      <h2>Interests</h2>
+    <div className="page">
+      <h2 className="page-title">Interests</h2>
       {error && <p className="error">{error}</p>}
 
-      <h3>Received</h3>
-      {received.length === 0 && <p>No interests received yet.</p>}
-      {received.map((i) => (
-        <div className="profile-item" key={i._id}>
-          <h3>{i.from?.name}</h3>
-          <p className="badge">{i.status}</p>
-          {i.status === "pending" && (
-            <div className="pager">
-              <button onClick={() => respond(i._id, "accepted")}>Accept</button>
-              <button className="secondary" onClick={() => respond(i._id, "rejected")}>
-                Reject
-              </button>
+      <h3 className="section-title">Received</h3>
+      {received.length === 0 && <p className="muted">No interests received yet.</p>}
+      <div className="interest-list">
+        {received.map((i) => (
+          <div className="interest-card" key={i._id}>
+            <div className="avatar small">
+              {i.from?.name?.charAt(0).toUpperCase()}
             </div>
-          )}
-        </div>
-      ))}
+            <div className="interest-info">
+              <h4>{i.from?.name}</h4>
+              <span className={`status status-${i.status}`}>{i.status}</span>
+            </div>
+            {i.status === "pending" && (
+              <div className="interest-actions">
+                <button className="btn-primary" onClick={() => respond(i._id, "accepted")}>
+                  Accept
+                </button>
+                <button className="btn-secondary" onClick={() => respond(i._id, "rejected")}>
+                  Reject
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
 
-      <h3>Sent</h3>
-      {sent.length === 0 && <p>You have not sent any interests.</p>}
-      {sent.map((i) => (
-        <div className="profile-item" key={i._id}>
-          <h3>{i.to?.name}</h3>
-          <p className="badge">{i.status}</p>
-        </div>
-      ))}
-
-      <button className="secondary" onClick={() => navigate("/dashboard")}>
-        Back to dashboard
-      </button>
+      <h3 className="section-title">Sent</h3>
+      {sent.length === 0 && <p className="muted">You have not sent any interests.</p>}
+      <div className="interest-list">
+        {sent.map((i) => (
+          <div className="interest-card" key={i._id}>
+            <div className="avatar small">
+              {i.to?.name?.charAt(0).toUpperCase()}
+            </div>
+            <div className="interest-info">
+              <h4>{i.to?.name}</h4>
+              <span className={`status status-${i.status}`}>{i.status}</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

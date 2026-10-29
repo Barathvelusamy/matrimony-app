@@ -16,25 +16,17 @@ export default function Dashboard() {
       });
   }, [navigate]);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
   if (!user) return <div className="card">Loading...</div>;
 
   return (
-    <div className="card">
+    <div className="card account">
+      <div className="avatar">{user.name.charAt(0).toUpperCase()}</div>
       <h2>Welcome, {user.name}</h2>
-      <p>Email: {user.email}</p>
-      <p>Role: {user.role}</p>
-      <button onClick={() => navigate("/profile")}>My Profile</button>
-      <button onClick={() => navigate("/search")}>Search Profiles</button>
-      <button onClick={() => navigate("/interests")}>Interests</button>
+      <p className="muted">{user.email}</p>
+      <span className="badge">{user.role}</span>
       {user.role === "admin" && (
         <button onClick={() => navigate("/admin")}>Admin Panel</button>
       )}
-      <button onClick={logout}>Logout</button>
     </div>
   );
 }

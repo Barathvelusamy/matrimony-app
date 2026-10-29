@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
 
 const age = (dob) =>
@@ -17,7 +16,6 @@ export default function Search() {
   const [result, setResult] = useState(null);
   const [sent, setSent] = useState({});
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -50,9 +48,11 @@ export default function Search() {
   };
 
   return (
-    <div className="card wide">
-      <h2>Search Profiles</h2>
+    <div className="page">
+      <h2 className="page-title">Search Profiles</h2>
+
       <form
+        className="filters"
         onSubmit={(e) => {
           e.preventDefault();
           search(1);
@@ -68,51 +68,61 @@ export default function Search() {
         <input name="city" placeholder="City" value={filters.city} onChange={handleChange} />
         <input name="education" placeholder="Education" value={filters.education} onChange={handleChange} />
         <input name="religion" placeholder="Religion" value={filters.religion} onChange={handleChange} />
-        <button type="submit">Search</button>
+        <button type="submit" className="btn-primary">
+          Search
+        </button>
       </form>
 
       {error && <p className="error">{error}</p>}
 
       {result && (
         <>
-          <p>
+          <p className="result-count">
             {result.total} profile(s) found. Page {result.page} of {result.pages || 1}
           </p>
-          {result.profiles.map((p) => (
-            <div className="profile-item" key={p._id}>
-              <h3>
-                {p.user?.name}, {age(p.dateOfBirth)}
-              </h3>
-              <p>
-                {p.education}
-                {p.occupation ? ` | ${p.occupation}` : ""}
-              </p>
-              <p>
-                {p.city}
-                {p.state ? `, ${p.state}` : ""}
-              </p>
-              {p.religion && <p>{p.religion}{p.star ? ` | ${p.star}` : ""}</p>}
-              {sent[p.user._id] ? (
-                <p className="success">{sent[p.user._id]}</p>
-              ) : (
-                <button onClick={() => sendInterest(p.user._id)}>Send Interest</button>
-              )}
-            </div>
-          ))}
-          <div className="pager">
-            <button disabled={result.page <= 1} onClick={() => search(result.page - 1)}>
+
+          <div className="profile-grid">
+            {result.profiles.map((p) => (
+              <div className="profile-card" key={p._id}>
+                <div className="avatar">
+                  {p.user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <h3>
+                  {p.user?.name}, {age(p.dateOfBirth)}
+                </h3>
+                <p className="muted">
+                  {p.city}
+                  {p.state ? `, ${p.state}` : ""}
+                </p>
+                <div className="chips">
+                  {p.education && <span>{p.education}</span>}
+                  {p.occupation && <span>{p.occupation}</span>}
+                  {p.religion && <span>{p.religion}</span>}
+                  {p.star && <span>{p.star}</span>}
+                  {p.height && <span>{p.height} cm</span>}
+                </div>
+                {p.about && <p className="about">{p.about}</p>}
+                {sent[p.user._id] ? (
+                  <p className="success">{sent[p.user._id]}</p>
+                ) : (
+                  <button className="btn-primary" onClick={() => sendInterest(p.user._id)}>
+                    Send Interest
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="pagination">
+            <button className="btn-secondary" disabled={result.page <= 1} onClick={() => search(result.page - 1)}>
               Previous
             </button>
-            <button disabled={result.page >= result.pages} onClick={() => search(result.page + 1)}>
+            <button className="btn-secondary" disabled={result.page >= result.pages} onClick={() => search(result.page + 1)}>
               Next
             </button>
           </div>
         </>
       )}
-
-      <button className="secondary" onClick={() => navigate("/dashboard")}>
-        Back to dashboard
-      </button>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
 
 const empty = {
@@ -22,7 +21,6 @@ export default function ProfileForm() {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     api
@@ -57,38 +55,95 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="card wide">
-      <h2>My Profile</h2>
-      {status && <p className="badge">Status: {status}</p>}
-      <form onSubmit={handleSubmit}>
-        <select name="gender" value={form.gender} onChange={handleChange}>
-          <option value="">Select gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-        <label>Date of birth</label>
-        <input name="dateOfBirth" type="date" value={form.dateOfBirth} onChange={handleChange} />
-        <input name="height" type="number" placeholder="Height (cm)" value={form.height} onChange={handleChange} />
-        <select name="maritalStatus" value={form.maritalStatus} onChange={handleChange}>
-          <option value="never married">Never married</option>
-          <option value="divorced">Divorced</option>
-          <option value="widowed">Widowed</option>
-        </select>
-        <input name="religion" placeholder="Religion" value={form.religion} onChange={handleChange} />
-        <input name="community" placeholder="Community" value={form.community} onChange={handleChange} />
-        <input name="star" placeholder="Star (nakshatram)" value={form.star} onChange={handleChange} />
-        <input name="education" placeholder="Education" value={form.education} onChange={handleChange} />
-        <input name="occupation" placeholder="Occupation" value={form.occupation} onChange={handleChange} />
-        <input name="city" placeholder="City" value={form.city} onChange={handleChange} />
-        <input name="state" placeholder="State" value={form.state} onChange={handleChange} />
-        <textarea name="about" placeholder="About me (max 500 characters)" value={form.about} onChange={handleChange} />
-        <button type="submit">Save profile</button>
+    <div className="page">
+      <div className="page-header">
+        <h2 className="page-title">My Profile</h2>
+        {status && <span className={`status status-${status}`}>{status}</span>}
+      </div>
+
+      <form className="form-card" onSubmit={handleSubmit}>
+        <h3>Basic details</h3>
+        <div className="form-grid">
+          <div>
+            <label>Gender</label>
+            <select name="gender" value={form.gender} onChange={handleChange}>
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div>
+            <label>Date of birth</label>
+            <input name="dateOfBirth" type="date" value={form.dateOfBirth} onChange={handleChange} />
+          </div>
+          <div>
+            <label>Height (cm)</label>
+            <input name="height" type="number" value={form.height} onChange={handleChange} />
+          </div>
+          <div>
+            <label>Marital status</label>
+            <select name="maritalStatus" value={form.maritalStatus} onChange={handleChange}>
+              <option value="never married">Never married</option>
+              <option value="divorced">Divorced</option>
+              <option value="widowed">Widowed</option>
+            </select>
+          </div>
+        </div>
+
+        <h3>Background</h3>
+        <div className="form-grid">
+          <div>
+            <label>Religion</label>
+            <input name="religion" value={form.religion} onChange={handleChange} />
+          </div>
+          <div>
+            <label>Community</label>
+            <input name="community" value={form.community} onChange={handleChange} />
+          </div>
+          <div>
+            <label>Star (nakshatram)</label>
+            <input name="star" value={form.star} onChange={handleChange} />
+          </div>
+        </div>
+
+        <h3>Education and work</h3>
+        <div className="form-grid">
+          <div>
+            <label>Education</label>
+            <input name="education" value={form.education} onChange={handleChange} />
+          </div>
+          <div>
+            <label>Occupation</label>
+            <input name="occupation" value={form.occupation} onChange={handleChange} />
+          </div>
+        </div>
+
+        <h3>Location</h3>
+        <div className="form-grid">
+          <div>
+            <label>City</label>
+            <input name="city" value={form.city} onChange={handleChange} />
+          </div>
+          <div>
+            <label>State</label>
+            <input name="state" value={form.state} onChange={handleChange} />
+          </div>
+        </div>
+
+        <h3>About me</h3>
+        <textarea
+          name="about"
+          placeholder="A few lines about yourself (max 500 characters)"
+          value={form.about}
+          onChange={handleChange}
+        />
+
+        {message && <p className="success">{message}</p>}
+        {error && <p className="error">{error}</p>}
+        <button type="submit" className="btn-primary">
+          Save profile
+        </button>
       </form>
-      {message && <p className="success">{message}</p>}
-      {error && <p className="error">{error}</p>}
-      <button className="secondary" onClick={() => navigate("/dashboard")}>
-        Back to dashboard
-      </button>
     </div>
   );
 }
