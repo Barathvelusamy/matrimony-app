@@ -11,7 +11,7 @@ export default function Layout() {
   };
 
   return (
-    <>
+    <div className="app-shell">
       <nav className="navbar">
         <Link to="/" className="brand">
           Matrimony
@@ -40,6 +40,14 @@ export default function Layout() {
       <main className="main">
         <Outlet />
       </main>
-    </>
+      <footer className="footer">
+        <p>Matrimony App, a portfolio project by Barath</p>
+        <p>
+          <a href="https://github.com/Barathvelusamy/matrimony-app" target="_blank" rel="noreferrer">
+            View source on GitHub
+          </a>
+        </p>
+      </footer>
+    </div>
   );
 }

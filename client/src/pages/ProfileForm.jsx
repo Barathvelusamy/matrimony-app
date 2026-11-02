@@ -14,6 +14,7 @@ const empty = {
   city: "",
   state: "",
   about: "",
+  photo: "",
 };
 
 export default function ProfileForm() {
@@ -21,6 +22,9 @@ export default function ProfileForm() {
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [photoMsg, setPhotoMsg] = useState("");
+  const [photoErr, setPhotoErr] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     api
@@ -54,11 +58,49 @@ export default function ProfileForm() {
     }
   };
 
+  const handlePhoto = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setPhotoMsg("");
+    setPhotoErr("");
+    setUploading(true);
+    try {
+      const data = new FormData();
+      data.append("photo", file);
+      const res = await api.post("/profile/photo", data);
+      setForm((f) => ({ ...f, photo: res.data.photo }));
+      setPhotoMsg("Photo uploaded");
+    } catch (err) {
+      setPhotoErr(err.response?.data?.message || "Photo upload failed");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  };
+
   return (
     <div className="page">
       <div className="page-header">
         <h2 className="page-title">My Profile</h2>
         {status && <span className={`status status-${status}`}>{status}</span>}
+      </div>
+
+      <div className="form-card photo-box">
+        {form.photo ? (
+          <img className="avatar-img" src={form.photo} alt="Profile" />
+        ) : (
+          <div className="avatar">?</div>
+        )}
+        <div>
+          <h3>Profile photo</h3>
+          <p className="muted">JPG or PNG, up to 2 MB. Save your details first.</p>
+          <label className="btn-secondary file-btn">
+            {uploading ? "Uploading..." : "Choose photo"}
+            <input type="file" accept="image/*" onChange={handlePhoto} disabled={uploading} hidden />
+          </label>
+          {photoMsg && <p className="success">{photoMsg}</p>}
+          {photoErr && <p className="error">{photoErr}</p>}
+        </div>
       </div>
 
       <form className="form-card" onSubmit={handleSubmit}>

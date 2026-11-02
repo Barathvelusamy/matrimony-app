@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import Loader from "../components/Loader";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ export default function Dashboard() {
       });
   }, [navigate]);
 
-  if (!user) return <div className="card">Loading...</div>;
+  if (!user) return <Loader text="Loading your account..." />;
 
   return (
     <div className="card account">

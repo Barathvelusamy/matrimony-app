@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api";
+import Loader from "../components/Loader";
 
 const age = (dob) =>
   Math.floor((Date.now() - new Date(dob)) / (365.25 * 24 * 60 * 60 * 1000));
@@ -16,6 +17,7 @@ export default function Search() {
   const [result, setResult] = useState(null);
   const [sent, setSent] = useState({});
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -23,6 +25,7 @@ export default function Search() {
 
   const search = async (page = 1) => {
     setError("");
+    setLoading(true);
     try {
       const params = { page };
       Object.entries(filters).forEach(([k, v]) => {
@@ -32,6 +35,8 @@ export default function Search() {
       setResult(res.data);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,14 +73,30 @@ export default function Search() {
         <input name="city" placeholder="City" value={filters.city} onChange={handleChange} />
         <input name="education" placeholder="Education" value={filters.education} onChange={handleChange} />
         <input name="religion" placeholder="Religion" value={filters.religion} onChange={handleChange} />
-        <button type="submit" className="btn-primary">
-          Search
+        <button type="submit" className="btn-primary" disabled={loading}>
+          {loading ? "Searching..." : "Search"}
         </button>
       </form>
 
       {error && <p className="error">{error}</p>}
 
-      {result && (
+      {loading && <Loader text="Searching profiles..." />}
+
+      {!loading && !result && !error && (
+        <div className="empty-state">
+          <h3>Find your match</h3>
+          <p>Choose filters above and click Search. Leave them empty to see everyone.</p>
+        </div>
+      )}
+
+      {!loading && result && result.profiles.length === 0 && (
+        <div className="empty-state">
+          <h3>No profiles found</h3>
+          <p>Try removing a filter or widening the age range.</p>
+        </div>
+      )}
+
+      {!loading && result && result.profiles.length > 0 && (
         <>
           <p className="result-count">
             {result.total} profile(s) found. Page {result.page} of {result.pages || 1}
@@ -84,9 +105,13 @@ export default function Search() {
           <div className="profile-grid">
             {result.profiles.map((p) => (
               <div className="profile-card" key={p._id}>
-                <div className="avatar">
-                  {p.user?.name?.charAt(0).toUpperCase()}
-                </div>
+                {p.photo ? (
+                  <img className="avatar-img" src={p.photo} alt={p.user?.name} />
+                ) : (
+                  <div className="avatar">
+                    {p.user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <h3>
                   {p.user?.name}, {age(p.dateOfBirth)}
                 </h3>

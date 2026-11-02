@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import Loader from "../components/Loader";
 
 export default function Interests() {
   const [received, setReceived] = useState([]);
   const [sent, setSent] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
     try {
@@ -16,6 +18,8 @@ export default function Interests() {
       setSent(s.data);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,13 +36,19 @@ export default function Interests() {
     }
   };
 
+  if (loading) return <Loader text="Loading interests..." />;
+
   return (
     <div className="page">
       <h2 className="page-title">Interests</h2>
       {error && <p className="error">{error}</p>}
 
       <h3 className="section-title">Received</h3>
-      {received.length === 0 && <p className="muted">No interests received yet.</p>}
+      {received.length === 0 && (
+        <div className="empty-state">
+          <p>No interests received yet.</p>
+        </div>
+      )}
       <div className="interest-list">
         {received.map((i) => (
           <div className="interest-card" key={i._id}>
@@ -64,7 +74,11 @@ export default function Interests() {
       </div>
 
       <h3 className="section-title">Sent</h3>
-      {sent.length === 0 && <p className="muted">You have not sent any interests.</p>}
+      {sent.length === 0 && (
+        <div className="empty-state">
+          <p>You have not sent any interests. Search profiles and send one.</p>
+        </div>
+      )}
       <div className="interest-list">
         {sent.map((i) => (
           <div className="interest-card" key={i._id}>

@@ -1,4 +1,5 @@
 const Profile = require("../models/Profile");
+const cloudinary = require("cloudinary").v2;
 
 exports.saveProfile = async (req, res) => {
   try {
@@ -77,5 +78,36 @@ exports.searchProfiles = async (req, res) => {
     res.json({ total, page, pages: Math.ceil(total / limit), profiles });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.uploadPhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No photo uploaded" });
+    }
+
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      return res.status(404).json({ message: "Save your profile details first" });
+    }
+
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "matrimony",
+          transformation: [{ width: 500, height: 500, crop: "fill", gravity: "face" }],
+        },
+        (err, uploaded) => (err ? reject(err) : resolve(uploaded))
+      );
+      stream.end(req.file.buffer);
+    });
+
+    profile.photo = result.secure_url;
+    await profile.save();
+
+    res.json({ message: "Photo uploaded", photo: profile.photo });
+  } catch (err) {
+    res.status(500).json({ message: "Photo upload failed" });
   }
 };
