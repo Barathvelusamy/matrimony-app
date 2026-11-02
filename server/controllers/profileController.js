@@ -111,3 +111,80 @@ exports.uploadPhoto = async (req, res) => {
     res.status(500).json({ message: "Photo upload failed" });
   }
 };
+
+const uploadBuffer = (buffer, options) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(options, (err, uploaded) =>
+      err ? reject(err) : resolve(uploaded)
+    );
+    stream.end(buffer);
+  });
+
+exports.addGalleryPhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No photo uploaded" });
+    }
+
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      return res.status(404).json({ message: "Save your profile details first" });
+    }
+
+    if (profile.photos.length >= 5) {
+      return res.status(400).json({ message: "You can add up to 5 photos" });
+    }
+
+    const result = await uploadBuffer(req.file.buffer, {
+      folder: "matrimony/gallery",
+      transformation: [{ width: 900, height: 900, crop: "limit" }],
+    });
+
+    profile.photos.push(result.secure_url);
+    await profile.save();
+
+    res.json({ message: "Photo added", photos: profile.photos });
+  } catch (err) {
+    res.status(500).json({ message: "Photo upload failed" });
+  }
+};
+
+exports.removeGalleryPhoto = async (req, res) => {
+  try {
+    const { url } = req.body;
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    profile.photos = profile.photos.filter((p) => p !== url);
+    await profile.save();
+
+    res.json({ message: "Photo removed", photos: profile.photos });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.getProfileByUser = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.params.userId }).populate(
+      "user",
+      "name"
+    );
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    const isOwner = String(profile.user._id) === req.user.id;
+    if (profile.status !== "approved" && !isOwner) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.json(profile);
+   } catch (err) {
+    console.error("Gallery upload error:", err.message);
+    res.status(500).json({ message: "Photo upload failed" });
+  }
+};

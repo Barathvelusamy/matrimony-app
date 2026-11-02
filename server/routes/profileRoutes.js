@@ -5,6 +5,9 @@ const {
   getMyProfile,
   searchProfiles,
   uploadPhoto,
+  addGalleryPhoto,
+  removeGalleryPhoto,
+  getProfileByUser,
 } = require("../controllers/profileController");
 const auth = require("../middleware/auth");
 
@@ -34,5 +37,8 @@ router.post("/", auth, saveProfile);
 router.get("/me", auth, getMyProfile);
 router.get("/search", auth, searchProfiles);
 router.post("/photo", auth, handleUpload, uploadPhoto);
+router.post("/photos", auth, handleUpload, addGalleryPhoto);
+router.post("/photos/remove", auth, removeGalleryPhoto);
+router.get("/user/:userId", auth, getProfileByUser);
 
 module.exports = router;

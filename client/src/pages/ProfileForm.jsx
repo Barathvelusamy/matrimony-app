@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import GallerySection from "../components/GallerySection";
 
 const empty = {
   gender: "",
@@ -186,6 +187,7 @@ export default function ProfileForm() {
           Save profile
         </button>
       </form>
+            <GallerySection />
     </div>
   );
 }

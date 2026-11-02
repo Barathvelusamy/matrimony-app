@@ -25,6 +25,7 @@ const profileSchema = new mongoose.Schema(
     state: { type: String },
     about: { type: String, maxlength: 500 },
     photo: { type: String },
+    photos: { type: [String], default: [] },
     status: {
       type: String,
       enum: ["pending", "approved", "blocked"],

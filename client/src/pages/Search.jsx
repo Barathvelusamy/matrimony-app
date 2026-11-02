@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api";
 import Loader from "../components/Loader";
 
@@ -127,6 +128,9 @@ export default function Search() {
                   {p.height && <span>{p.height} cm</span>}
                 </div>
                 {p.about && <p className="about">{p.about}</p>}
+                <Link className="view-link" to={`/profile/${p.user._id}`}>
+                  View profile
+                </Link>
                 {sent[p.user._id] ? (
                   <p className="success">{sent[p.user._id]}</p>
                 ) : (
