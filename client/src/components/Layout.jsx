@@ -1,8 +1,9 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+
+const linkClass = ({ isActive }) => (isActive ? "nav-item active" : "nav-item");
 
 export default function Layout() {
   const navigate = useNavigate();
-  useLocation();
   const token = localStorage.getItem("token");
 
   const logout = () => {
@@ -19,17 +20,27 @@ export default function Layout() {
         <div className="nav-links">
           {token ? (
             <>
-              <Link to="/search">Search</Link>
-              <Link to="/interests">Interests</Link>
-              <Link to="/profile">My Profile</Link>
-              <Link to="/dashboard">Account</Link>
+              <NavLink to="/search" className={linkClass}>
+                Search
+              </NavLink>
+              <NavLink to="/interests" className={linkClass}>
+                Interests
+              </NavLink>
+              <NavLink to="/profile" end className={linkClass}>
+                My Profile
+              </NavLink>
+              <NavLink to="/dashboard" className={linkClass}>
+                Account
+              </NavLink>
               <button className="nav-btn" onClick={logout}>
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
+              <NavLink to="/login" className={linkClass}>
+                Login
+              </NavLink>
               <Link to="/register" className="nav-cta">
                 Register
               </Link>
