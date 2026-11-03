@@ -3880,3 +3880,190 @@ a.home-link .go-link {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Login / Register box: dark glass style ===== */
+body[data-page="login"] .card,
+body[data-page="login"] .auth-card,
+body[data-page="login"] .auth,
+body[data-page="login"] .form-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 36px 34px;
+  color: white;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(240, 98, 146, 0.5) 0, transparent 45%),
+    radial-gradient(circle at 0% 100%, rgba(255, 152, 0, 0.35) 0, transparent 42%),
+    linear-gradient(135deg, rgba(43, 10, 74, 0.92), rgba(74, 20, 140, 0.9), rgba(123, 26, 110, 0.9));
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+/* Heading and text */
+body[data-page="login"] .card h1,
+body[data-page="login"] .card h2,
+body[data-page="login"] .auth-card h1,
+body[data-page="login"] .auth-card h2,
+body[data-page="login"] .auth h1,
+body[data-page="login"] .auth h2,
+body[data-page="login"] .form-card h1,
+body[data-page="login"] .form-card h2 {
+  color: white;
+  font-size: 30px;
+  margin-bottom: 6px;
+}
+
+body[data-page="login"] .card p,
+body[data-page="login"] .auth-card p,
+body[data-page="login"] .auth p,
+body[data-page="login"] .form-card p,
+body[data-page="login"] .muted {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-page="login"] label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Inputs: white, rounded, orange glow on focus */
+body[data-page="login"] input {
+  background: rgba(255, 255, 255, 0.97);
+  color: #2b0a4a;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 13px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body[data-page="login"] input:focus {
+  outline: none;
+  border-color: #ffb74d;
+  box-shadow: 0 0 0 4px rgba(255, 183, 77, 0.35);
+}
+
+/* Login button: orange to pink gradient */
+body[data-page="login"] button[type="submit"],
+body[data-page="login"] .card button,
+body[data-page="login"] .auth-card button,
+body[data-page="login"] .auth button {
+  background: linear-gradient(135deg, #ff9800, #f06292);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 13px;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(240, 98, 146, 0.45);
+  transition: transform 0.2s, filter 0.2s;
+}
+
+body[data-page="login"] button[type="submit"]:hover,
+body[data-page="login"] .card button:hover,
+body[data-page="login"] .auth-card button:hover,
+body[data-page="login"] .auth button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+/* Links */
+body[data-page="login"] .card a,
+body[data-page="login"] .auth-card a,
+body[data-page="login"] .auth a,
+body[data-page="login"] .form-card a {
+  color: #ffcc80;
+  font-weight: 600;
+}
+
+/* Error message */
+body[data-page="login"] .error {
+  background: rgba(255, 255, 255, 0.92);
+  color: #c2185b;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+/* ===== Login / Register box: light frosted style ===== */
+body[data-page="login"] .card,
+body[data-page="login"] .auth-card,
+body[data-page="login"] .auth,
+body[data-page="login"] .form-card {
+  position: relative;
+  overflow: hidden;
+  color: #3b0f5c;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-top: 6px solid transparent;
+  border-image: linear-gradient(90deg, #7b1fa2, #ec407a, #ff9800) 1;
+  border-image-slice: 1;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(244, 143, 177, 0.35) 0, transparent 45%),
+    radial-gradient(circle at 0% 100%, rgba(255, 204, 128, 0.4) 0, transparent 45%),
+    rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
+}
+
+/* Heading and text */
+body[data-page="login"] .card h1,
+body[data-page="login"] .card h2,
+body[data-page="login"] .auth-card h1,
+body[data-page="login"] .auth-card h2,
+body[data-page="login"] .auth h1,
+body[data-page="login"] .auth h2,
+body[data-page="login"] .form-card h1,
+body[data-page="login"] .form-card h2 {
+  color: #6a1b9a;
+}
+
+body[data-page="login"] .card p,
+body[data-page="login"] .auth-card p,
+body[data-page="login"] .auth p,
+body[data-page="login"] .form-card p,
+body[data-page="login"] .muted {
+  color: #6b5a78;
+}
+
+body[data-page="login"] label {
+  color: #4a148c;
+}
+
+/* Inputs: soft pastel with colored border */
+body[data-page="login"] input {
+  background: #fff7fb;
+  color: #2b0a4a;
+  border: 1.5px solid #e1bee7;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+body[data-page="login"] input:focus {
+  outline: none;
+  border-color: #ec407a;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(236, 64, 122, 0.18);
+}
+
+/* Button: purple to pink gradient */
+body[data-page="login"] button[type="submit"],
+body[data-page="login"] .card button,
+body[data-page="login"] .auth-card button,
+body[data-page="login"] .auth button {
+  background: linear-gradient(135deg, #7b1fa2, #ec407a);
+  color: white;
+  box-shadow: 0 10px 22px rgba(236, 64, 122, 0.35);
+}
+
+/* Links */
+body[data-page="login"] .card a,
+body[data-page="login"] .auth-card a,
+body[data-page="login"] .auth a,
+body[data-page="login"] .form-card a {
+  color: #c2185b;
+  font-weight: 600;
+}
+
+/* Error message */
+body[data-page="login"] .error {
+  background: #fde4ee;
+  color: #c2185b;
+}
