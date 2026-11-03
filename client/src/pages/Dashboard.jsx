@@ -42,89 +42,136 @@ export default function Dashboard() {
   const accepted =
     received.filter((i) => i.status === "accepted").length +
     sent.filter((i) => i.status === "accepted").length;
+  const recent = received.slice(0, 4);
 
   return (
-    <div className="dash">
-      <div className="dash-hero">
+    <div className="dg">
+      <aside className="dg-side">
+        <div className="dg-cover" />
         {profile?.photo ? (
-          <img className="dash-avatar" src={profile.photo} alt={user.name} />
+          <img className="dg-photo" src={profile.photo} alt={user.name} />
         ) : (
-          <div className="dash-avatar dash-initial">
+          <div className="dg-photo dg-initial">
             {user.name.charAt(0).toUpperCase()}
           </div>
         )}
-        <div className="dash-hero-text">
-          <h2>Welcome, {user.name}</h2>
-          <p className="muted">{user.email}</p>
-          <div className="dash-badges">
-            <span className="badge">{user.role}</span>
-            {profile?.status && (
-              <span className={`status status-${profile.status}`}>
-                Profile {profile.status}
-              </span>
-            )}
+        <h2>{user.name}</h2>
+        <p className="muted">{user.email}</p>
+        <div className="dash-badges dg-badges">
+          <span className="badge">{user.role}</span>
+          {profile?.status && (
+            <span className={`status status-${profile.status}`}>
+              Profile {profile.status}
+            </span>
+          )}
+        </div>
+
+        <div className="dg-progress">
+          <div className="dash-progress-top">
+            <strong>Profile completion</strong>
+            <span>{pct}%</span>
+          </div>
+          <div className="dash-bar">
+            <div className="dash-bar-fill" style={{ width: `${pct}%` }} />
           </div>
         </div>
+
+        <Link to="/profile" className="btn-primary dg-btn">
+          Edit profile
+        </Link>
         {user.role === "admin" && (
-          <button className="btn-primary" onClick={() => navigate("/admin")}>
+          <button className="btn-secondary dg-btn" onClick={() => navigate("/admin")}>
             Admin Panel
           </button>
         )}
-      </div>
+      </aside>
 
-      <div className="dash-progress">
-        <div className="dash-progress-top">
-          <strong>Profile completion</strong>
-          <span>{pct}%</span>
+      <main className="dg-main">
+        <div className="dg-hello">
+          <h2>Welcome back, {user.name} 👋</h2>
+          <p>Here is what is happening with your account.</p>
         </div>
-        <div className="dash-bar">
-          <div className="dash-bar-fill" style={{ width: `${pct}%` }} />
-        </div>
-        {pct < 100 && (
-          <p className="muted">
-            Complete profile ku more matches kedaikkum.{" "}
-            <Link to="/profile">Complete now</Link>
-          </p>
-        )}
-      </div>
 
-      <div className="int-tiles">
-        <div className="int-tile t1">
-          <strong>{received.length}</strong>
-          <span>Received</span>
+        <div className="dg-tiles">
+          <Link to="/interests" className="int-tile t1">
+            <strong>{received.length}</strong>
+            <span>Received</span>
+          </Link>
+          <Link to="/interests" className="int-tile t2">
+            <strong>{pending}</strong>
+            <span>Waiting for your reply</span>
+          </Link>
+          <Link to="/interests" className="int-tile t3">
+            <strong>{accepted}</strong>
+            <span>Accepted</span>
+          </Link>
+          <Link to="/interests" className="int-tile t4">
+            <strong>{sent.length}</strong>
+            <span>Sent</span>
+          </Link>
         </div>
-        <div className="int-tile t2">
-          <strong>{pending}</strong>
-          <span>Waiting for your reply</span>
-        </div>
-        <div className="int-tile t3">
-          <strong>{accepted}</strong>
-          <span>Accepted</span>
-        </div>
-        <div className="int-tile t4">
-          <strong>{sent.length}</strong>
-          <span>Sent</span>
-        </div>
-      </div>
 
-      <h3 className="dash-heading">Quick actions</h3>
-      <div className="dash-actions">
-        <Link to="/search" className="dash-action">
-          <span className="dash-icon">🔍</span>
-          <strong>Search</strong>
-          <small>Find new profiles</small>
-        </Link>
-        <Link to="/interests" className="dash-action">
-          <span className="dash-icon">💌</span>
-          <strong>Interests</strong>
-          <small>Received and sent</small>
-        </Link>
-        <Link to="/profile" className="dash-action">
-          <span className="dash-icon">👤</span>
-          <strong>My Profile</strong>
-          <small>View and edit</small>
-        </Link>
-      </div>
+        <div className="dg-panel">
+          <h3>Quick actions</h3>
+          <div className="dg-actions">
+            <Link to="/search" className="dg-action">
+              <span className="dash-icon">🔍</span>
+              <div>
+                <strong>Search</strong>
+                <small>Find new profiles</small>
+              </div>
+            </Link>
+            <Link to="/interests" className="dg-action">
+              <span className="dash-icon">💌</span>
+              <div>
+                <strong>Interests</strong>
+                <small>Received and sent</small>
+              </div>
+            </Link>
+            <Link to="/profile" className="dg-action">
+              <span className="dash-icon">👤</span>
+              <div>
+                <strong>My Profile</strong>
+                <small>View and edit</small>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        <div className="dg-panel">
+          <div className="dg-panel-head">
+            <h3>Recent interests</h3>
+            <Link to="/interests">View all →</Link>
+          </div>
+
+          {recent.length === 0 && (
+            <p className="muted">No interests received yet.</p>
+          )}
+
+          <div className="dg-recent">
+            {recent.map((i) => (
+              <div className="dg-row" key={i._id}>
+                {i.profile?.photo ? (
+                  <img className="dg-mini" src={i.profile.photo} alt={i.from?.name} />
+                ) : (
+                  <div className="dg-mini dg-initial">
+                    {i.from?.name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div className="dg-row-text">
+                  <strong>{i.from?.name}</strong>
+                  <small>
+                    {[i.profile?.city, i.profile?.occupation]
+                      .filter(Boolean)
+                      .join(" · ") || "Sent you an interest"}
+                  </small>
+                </div>
+                <span className={`status status-${i.status}`}>{i.status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

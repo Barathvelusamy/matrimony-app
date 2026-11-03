@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../api";
 
 // My Profile page URL veru na (example "/profile"), inga mattum maathunga
 const PROFILE_PATH = "/profile";
@@ -70,11 +72,77 @@ const features = [
   },
 ];
 
+const age = (dob) =>
+  dob
+    ? Math.floor((Date.now() - new Date(dob)) / (365.25 * 24 * 60 * 60 * 1000))
+    : null;
+
 export default function Home() {
   const token = localStorage.getItem("token");
+  const [me, setMe] = useState(null);
 
   // Login pannala na login page ku, pannirundha andha page ku
   const go = (path) => (token ? path : "/login");
+
+  useEffect(() => {
+    if (!token) return;
+    const load = async () => {
+      try {
+        const [user, profile, received] = await Promise.all([
+          api.get("/auth/me").then((x) => x.data),
+          api.get("/profile/me").then((x) => x.data).catch(() => null),
+          api.get("/interests/received").then((x) => x.data).catch(() => []),
+        ]);
+        setMe({ user, profile, received });
+      } catch (err) {
+        setMe(null);
+      }
+    };
+    load();
+  }, [token]);
+
+  // Hero floating cards: real data (login aana), illana sample
+  const name = me?.user?.name;
+  const p = me?.profile;
+  const years = p ? age(p.dateOfBirth) : null;
+  const pending = me ? me.received.filter((i) => i.status === "pending").length : 0;
+
+  const card1Title = name ? `${name}${years ? `, ${years}` : ""}` : "Your name, 25";
+  const card1Sub = name
+    ? [p?.city, p?.education].filter(Boolean).join(" · ") || "Complete your profile"
+    : "Your city · Your education";
+
+  let card2Title = "Get interests";
+  let card2Sub = "Login to see yours";
+  if (me) {
+    card2Title =
+      pending > 0
+        ? `${pending} new interest${pending > 1 ? "s" : ""}`
+        : "No new interests yet";
+    card2Sub = `${me.received.length} received in total`;
+  }
+
+  let card3Title = "Admin approved";
+  let card3Sub = "Every profile is reviewed";
+  let card3Icon = "✅";
+  if (me) {
+    if (!p) {
+      card3Title = "Create your profile";
+      card3Sub = "Add your details to get started";
+      card3Icon = "📝";
+    } else if (p.status === "approved") {
+      card3Title = "Profile approved";
+      card3Sub = "You are live in search";
+    } else if (p.status === "rejected") {
+      card3Title = "Profile rejected";
+      card3Sub = "Update your details and save again";
+      card3Icon = "⚠️";
+    } else {
+      card3Title = "Profile pending";
+      card3Sub = "Waiting for admin approval";
+      card3Icon = "⏳";
+    }
+  }
 
   return (
     <div className="home">
@@ -117,27 +185,35 @@ export default function Home() {
           </div>
 
           <div className="hx-visual">
-            <div className="hx-card c1">
-              <div className="hx-ava">P</div>
+            <Link to={go(PROFILE_PATH)} className="hx-card c1">
+              {p?.photo ? (
+                <img className="hx-ava hx-ava-img" src={p.photo} alt={name} />
+              ) : (
+                <div className="hx-ava">
+                  {name ? name.charAt(0).toUpperCase() : "?"}
+                </div>
+              )}
               <div>
-                <strong>Priya, 26</strong>
-                <small>Coimbatore · MCA</small>
+                <strong>{card1Title}</strong>
+                <small>{card1Sub}</small>
               </div>
-            </div>
-            <div className="hx-card c2">
+            </Link>
+
+            <Link to={go("/interests")} className="hx-card c2">
               <span className="hx-emoji">💌</span>
               <div>
-                <strong>New interest received</strong>
-                <small>Tap to view profile</small>
+                <strong>{card2Title}</strong>
+                <small>{card2Sub}</small>
               </div>
-            </div>
-            <div className="hx-card c3">
-              <span className="hx-emoji">✅</span>
+            </Link>
+
+            <Link to={go("/dashboard")} className="hx-card c3">
+              <span className="hx-emoji">{card3Icon}</span>
               <div>
-                <strong>Profile approved</strong>
-                <small>You are live in search</small>
+                <strong>{card3Title}</strong>
+                <small>{card3Sub}</small>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>
