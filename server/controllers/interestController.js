@@ -1,6 +1,25 @@
 const Interest = require("../models/Interest");
 const Profile = require("../models/Profile");
 
+const attachProfiles = async (interests, key) => {
+  const valid = interests.filter((i) => i[key]);
+  const ids = valid.map((i) => i[key]._id);
+  const profiles = await Profile.find({ user: { $in: ids } }).select(
+       "user photo city state education occupation dateOfBirth religion community star height about"
+  );
+
+  const map = {};
+  profiles.forEach((p) => {
+    map[String(p.user)] = p;
+  });
+
+  return valid.map((i) => {
+    const obj = i.toObject();
+    obj.profile = map[String(i[key]._id)] || null;
+    return obj;
+  });
+};
+
 exports.sendInterest = async (req, res) => {
   try {
     const toUser = req.params.userId;
@@ -28,8 +47,10 @@ exports.sendInterest = async (req, res) => {
 
 exports.getReceived = async (req, res) => {
   try {
-    const interests = await Interest.find({ to: req.user.id }).populate("from", "name");
-    res.json(interests);
+    const interests = await Interest.find({ to: req.user.id })
+      .populate("from", "name")
+      .sort({ createdAt: -1 });
+    res.json(await attachProfiles(interests, "from"));
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -37,8 +58,10 @@ exports.getReceived = async (req, res) => {
 
 exports.getSent = async (req, res) => {
   try {
-    const interests = await Interest.find({ from: req.user.id }).populate("to", "name");
-    res.json(interests);
+    const interests = await Interest.find({ from: req.user.id })
+      .populate("to", "name")
+      .sort({ createdAt: -1 });
+    res.json(await attachProfiles(interests, "to"));
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

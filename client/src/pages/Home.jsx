@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 
+// My Profile page URL veru na (example "/profile"), inga mattum maathunga
+const PROFILE_PATH = "/profile";
+
 const faqs = [
   {
     q: "Is it free to join?",
@@ -19,33 +22,123 @@ const faqs = [
   },
 ];
 
+const steps = [
+  {
+    no: 1,
+    title: "Create your profile",
+    text: "Add your education, job, city, photos and a few lines about yourself.",
+    to: PROFILE_PATH,
+  },
+  {
+    no: 2,
+    title: "Search matches",
+    text: "Filter by age, city, education and religion to find the right people.",
+    to: "/search",
+  },
+  {
+    no: 3,
+    title: "Send interest",
+    text: "Send an interest and connect when the other person accepts.",
+    to: "/interests",
+  },
+];
+
+const features = [
+  {
+    icon: "✔",
+    title: "Approved profiles",
+    text: "Every new profile is reviewed by an admin before it appears in search.",
+    to: "/search",
+  },
+  {
+    icon: "⌕",
+    title: "Smart filters",
+    text: "Narrow results by age range, city, education and religion.",
+    to: "/search",
+  },
+  {
+    icon: "▣",
+    title: "Photo gallery",
+    text: "Add a main photo and up to five more to show on your profile.",
+    to: PROFILE_PATH,
+  },
+  {
+    icon: "♥",
+    title: "Interest system",
+    text: "Send, accept or reject interests and track their status in one page.",
+    to: "/interests",
+  },
+];
+
 export default function Home() {
   const token = localStorage.getItem("token");
 
+  // Login pannala na login page ku, pannirundha andha page ku
+  const go = (path) => (token ? path : "/login");
+
   return (
     <div className="home">
-      <section className="hero hero-image">
-        <span className="hero-tag">Free to join</span>
-        <h1>Find your life partner</h1>
-        <p>
-          Create your profile, search matches and send interests, all in one
-          place.
-        </p>
-        <div className="hero-actions">
-          {token ? (
-            <Link to="/search" className="btn">
-              Search profiles
-            </Link>
-          ) : (
-            <>
-              <Link to="/register" className="btn">
-                Get started
-              </Link>
-              <Link to="/login" className="btn btn-outline">
-                Login
-              </Link>
-            </>
-          )}
+      <section className="hero hero-image hx">
+        <div className="hx-blob b1" />
+        <div className="hx-blob b2" />
+        <div className="hx-blob b3" />
+
+        <div className="hx-inner">
+          <div className="hx-text">
+            <span className="hero-tag">💜 Free to join</span>
+            <h1>
+              Find your <span className="hx-grad">life partner</span>
+            </h1>
+            <p>
+              Create your profile, search matches and send interests, all in
+              one place.
+            </p>
+            <div className="hero-actions">
+              {token ? (
+                <Link to="/search" className="btn">
+                  Search profiles
+                </Link>
+              ) : (
+                <>
+                  <Link to="/register" className="btn">
+                    Get started
+                  </Link>
+                  <Link to="/login" className="btn btn-outline">
+                    Login
+                  </Link>
+                </>
+              )}
+            </div>
+            <div className="hx-trust">
+              <span>✔ Admin reviewed</span>
+              <span>🔒 Members only photos</span>
+              <span>💸 100% free</span>
+            </div>
+          </div>
+
+          <div className="hx-visual">
+            <div className="hx-card c1">
+              <div className="hx-ava">P</div>
+              <div>
+                <strong>Priya, 26</strong>
+                <small>Coimbatore · MCA</small>
+              </div>
+            </div>
+            <div className="hx-card c2">
+              <span className="hx-emoji">💌</span>
+              <div>
+                <strong>New interest received</strong>
+                <small>Tap to view profile</small>
+              </div>
+            </div>
+            <div className="hx-card c3">
+              <span className="hx-emoji">✅</span>
+              <div>
+                <strong>Profile approved</strong>
+                <small>You are live in search</small>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -68,48 +161,35 @@ export default function Home() {
         </div>
       </section>
 
-      <h2 className="section-heading">How it works</h2>
-      <section className="steps">
-        <div className="step">
-          <span className="step-no">1</span>
-          <h3>Create your profile</h3>
-          <p>Add your education, job, city, photos and a few lines about yourself.</p>
-        </div>
-        <div className="step">
-          <span className="step-no">2</span>
-          <h3>Search matches</h3>
-          <p>Filter by age, city, education and religion to find the right people.</p>
-        </div>
-        <div className="step">
-          <span className="step-no">3</span>
-          <h3>Send interest</h3>
-          <p>Send an interest and connect when the other person accepts.</p>
-        </div>
-      </section>
+      <div className="home-bg">
+        <h2 className="section-heading">How it works</h2>
+        <section className="steps">
+          {steps.map((s) => (
+            <Link to={go(s.to)} className="step home-link" key={s.no}>
+              <span className="step-no">{s.no}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <span className="go-link">
+                {token ? "Go to page →" : "Login to continue →"}
+              </span>
+            </Link>
+          ))}
+        </section>
 
-      <h2 className="section-heading">Why this app</h2>
-      <section className="features">
-        <div className="feature">
-          <div className="feature-icon">✔</div>
-          <h3>Approved profiles</h3>
-          <p>Every new profile is reviewed by an admin before it appears in search.</p>
-        </div>
-        <div className="feature">
-          <div className="feature-icon">⌕</div>
-          <h3>Smart filters</h3>
-          <p>Narrow results by age range, city, education and religion.</p>
-        </div>
-        <div className="feature">
-          <div className="feature-icon">▣</div>
-          <h3>Photo gallery</h3>
-          <p>Add a main photo and up to five more to show on your profile.</p>
-        </div>
-        <div className="feature">
-          <div className="feature-icon">♥</div>
-          <h3>Interest system</h3>
-          <p>Send, accept or reject interests and track their status in one page.</p>
-        </div>
-      </section>
+        <h2 className="section-heading">Why this app</h2>
+        <section className="features">
+          {features.map((f) => (
+            <Link to={go(f.to)} className="feature home-link" key={f.title}>
+              <div className="feature-icon">{f.icon}</div>
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+              <span className="go-link">
+                {token ? "Go to page →" : "Login to continue →"}
+              </span>
+            </Link>
+          ))}
+        </section>
+      </div>
 
       <h2 className="section-heading">Questions</h2>
       <section className="faq">
