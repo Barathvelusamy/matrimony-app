@@ -1,25 +1,21 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api";
+import OtpStep from "../components/OtpStep";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState("");
+  const [step, setStep] = useState("email");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const sendCode = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const res = await api.post("/auth/login", form);
-      localStorage.setItem("token", res.data.token);
-      navigate("/");
+      await api.post("/auth/login", { email });
+      setStep("code");
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -29,24 +25,35 @@ export default function Login() {
 
   return (
     <div className="card">
-      <h2>Welcome back</h2>
-      <p className="muted">Login to continue to your matches.</p>
-      <form onSubmit={handleSubmit}>
-        <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} />
-        <input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} />
-        <button type="submit" disabled={loading}>
-          {loading ? "Please wait..." : "Login"}
-        </button>
-      </form>
-      {loading && (
-        <p className="hint">
-          If this takes long, the server is waking up. Please wait up to a minute.
-        </p>
+      {step === "code" ? (
+        <OtpStep email={email.trim().toLowerCase()} onBack={() => setStep("email")} />
+      ) : (
+        <>
+          <h2>Welcome back</h2>
+          <p className="muted">Enter your email and we will send you a login code.</p>
+          <form onSubmit={sendCode}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? "Please wait..." : "Send code"}
+            </button>
+          </form>
+          {loading && (
+            <p className="hint">
+              If this takes long, the server is waking up. Please wait up to a minute.
+            </p>
+          )}
+          {error && <p className="error">{error}</p>}
+          <p className="link">
+            New here? <Link to="/register">Create an account</Link>
+          </p>
+        </>
       )}
-      {error && <p className="error">{error}</p>}
-      <p className="link">
-        New here? <Link to="/register">Create an account</Link>
-      </p>
     </div>
   );
 }

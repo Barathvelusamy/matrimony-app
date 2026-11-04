@@ -27,8 +27,8 @@ async function run() {
   for (const p of people) {
     const email = `${p.name.toLowerCase()}@demo.com`;
     if (await User.findOne({ email })) continue;
-
-    const user = await User.create({ name: p.name, email, password: hash });
+    
+    const user = await User.create({ name: p.name, email, password: hash, verified: true });
     await Profile.create({
       user: user._id,
       gender: p.gender,

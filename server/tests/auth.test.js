@@ -23,47 +23,77 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-describe("Auth API", () => {
-  const user = { name: "Test User", email: "test@example.com", password: "test1234" };
+describe("Auth API (email OTP)", () => {
+  const person = { name: "Test User", email: "test@example.com" };
 
-  it("registers a new user", async () => {
-    const res = await request(app).post("/api/auth/register").send(user);
+  const register = () => request(app).post("/api/auth/register").send(person);
+  const verify = (otp) =>
+    request(app).post("/api/auth/verify-otp").send({ email: person.email, otp });
+
+  it("registers and sends a 6 digit code", async () => {
+    const res = await register();
     expect(res.statusCode).toBe(201);
-    expect(res.body.message).toBe("Registered successfully");
-    expect(res.body.user.email).toBe(user.email);
-    expect(res.body.user.password).toBeUndefined();
+    expect(res.body.devOtp).toHaveLength(6);
   });
 
-  it("rejects a duplicate email", async () => {
-    await request(app).post("/api/auth/register").send(user);
-    const res = await request(app).post("/api/auth/register").send(user);
-    expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe("Email already registered");
-  });
-
-  it("rejects registration with missing fields", async () => {
+  it("rejects an invalid email", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ email: "x@example.com" });
+      .send({ name: "X", email: "not-an-email" });
     expect(res.statusCode).toBe(400);
   });
 
-  it("logs in with correct credentials and returns a token", async () => {
-    await request(app).post("/api/auth/register").send(user);
+  it("rejects registration without a name", async () => {
     const res = await request(app)
-      .post("/api/auth/login")
-      .send({ email: user.email, password: user.password });
+      .post("/api/auth/register")
+      .send({ email: person.email });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("logs in after verifying the correct code", async () => {
+    const reg = await register();
+    const res = await verify(reg.body.devOtp);
     expect(res.statusCode).toBe(200);
     expect(res.body.token).toBeDefined();
   });
 
-  it("rejects login with a wrong password", async () => {
-    await request(app).post("/api/auth/register").send(user);
+  it("rejects a wrong code", async () => {
+    await register();
+    const res = await verify("000000");
+    expect(res.statusCode).toBe(400);
+    expect(res.body.message).toBe("Wrong code");
+  });
+
+  it("blocks after 5 wrong attempts even with the right code", async () => {
+    const reg = await register();
+    for (let i = 0; i < 5; i++) await verify("000000");
+    const res = await verify(reg.body.devOtp);
+    expect(res.statusCode).toBe(429);
+  });
+
+  it("rejects registering an already verified email", async () => {
+    const reg = await register();
+    await verify(reg.body.devOtp);
+    const res = await register();
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("sends a code on login for an existing user", async () => {
+    const reg = await register();
+    await verify(reg.body.devOtp);
+    const login = await request(app)
+      .post("/api/auth/login")
+      .send({ email: person.email });
+    expect(login.statusCode).toBe(200);
+    const res = await verify(login.body.devOtp);
+    expect(res.body.token).toBeDefined();
+  });
+
+  it("returns 404 on login for an unknown email", async () => {
     const res = await request(app)
       .post("/api/auth/login")
-      .send({ email: user.email, password: "wrongpass" });
-    expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe("Invalid email or password");
+      .send({ email: "nobody@example.com" });
+    expect(res.statusCode).toBe(404);
   });
 
   it("blocks /me without a token", async () => {
@@ -72,15 +102,12 @@ describe("Auth API", () => {
   });
 
   it("returns the user on /me with a valid token", async () => {
-    await request(app).post("/api/auth/register").send(user);
-    const login = await request(app)
-      .post("/api/auth/login")
-      .send({ email: user.email, password: user.password });
+    const reg = await register();
+    const verified = await verify(reg.body.devOtp);
     const res = await request(app)
       .get("/api/auth/me")
-      .set("Authorization", `Bearer ${login.body.token}`);
+      .set("Authorization", `Bearer ${verified.body.token}`);
     expect(res.statusCode).toBe(200);
-    expect(res.body.email).toBe(user.email);
-    expect(res.body.password).toBeUndefined();
+    expect(res.body.email).toBe(person.email);
   });
 });
