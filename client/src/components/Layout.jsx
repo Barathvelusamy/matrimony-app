@@ -15,7 +15,7 @@ export default function Layout() {
     <div className="app-shell">
       <nav className="navbar">
         <Link to="/" className="brand">
-          Matrimony
+          Manamalai Matrimony
         </Link>
         <div className="nav-links">
           {token ? (
@@ -52,7 +52,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="footer">
-        <p>Matrimony App, a portfolio project by Barath</p>
+        <p>Manamalai Matrimony, a portfolio project by Barath</p>
         <p>
           <a href="https://github.com/Barathvelusamy/matrimony-app" target="_blank" rel="noreferrer">
             View source on GitHub
