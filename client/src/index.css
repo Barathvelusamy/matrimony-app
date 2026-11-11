@@ -5561,3 +5561,797 @@ button.int-tile.t4 {
     background-attachment: scroll;
   }
 }
+
+/* ===== Footer ===== */
+.ft {
+  position: relative;
+  color: rgba(255, 255, 255, 0.85);
+  background:
+    radial-gradient(circle at 90% 0%, rgba(236, 64, 122, 0.3), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(255, 152, 0, 0.18), transparent 40%),
+    linear-gradient(135deg, #1b0a33, #2d1052 60%, #3b0f5c);
+}
+
+.ft::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #7b1fa2, #ec407a, #ff9800);
+}
+
+.ft-inner {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 48px 24px 30px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.3fr 1fr;
+  gap: 34px;
+  box-sizing: border-box;
+}
+
+.ft-logo {
+  margin: 0;
+  font-size: 30px;
+  background: linear-gradient(90deg, #ffffff, #ffcc80, #f48fb1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ft-tag {
+  margin: 2px 0 12px;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ffb74d;
+}
+
+.ft-about {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.ft-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #25b36b, #128c7e);
+  box-shadow: 0 8px 20px rgba(18, 140, 126, 0.4);
+  transition: transform 0.2s;
+}
+
+.ft-wa:hover {
+  transform: translateY(-2px);
+}
+
+.ft-col h4 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  color: white;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.ft-col h4::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 34px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ec407a, #ff9800);
+}
+
+.ft-col a,
+.ft-col p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 11px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.ft-col a:hover {
+  color: #ffcc80;
+}
+
+.ft-ico {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  color: #f48fb1;
+}
+
+.ft-bottom {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 18px 24px 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 20px;
+  font-size: 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  box-sizing: border-box;
+}
+
+.ft-note {
+  opacity: 0.7;
+}
+
+.ft-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  color: white;
+  cursor: pointer;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ft-top:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 900px) {
+  .ft-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .ft-inner {
+    grid-template-columns: 1fr;
+    padding: 36px 20px 20px;
+  }
+  .ft-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.ft-note a {
+  color: #ffcc80;
+  text-decoration: underline;
+}
+
+.ft-note a:hover {
+  color: white;
+}
+
+/* ===== Navbar: glass + icons + gradient pills ===== */
+.app-shell .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 80px;
+  padding: 0 28px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: none;
+  box-shadow: 0 6px 24px rgba(74, 20, 140, 0.12);
+}
+
+/* Keezha rainbow line */
+.app-shell .navbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #7b1fa2, #ec407a, #ff9800);
+}
+
+.nv-ico {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Brand */
+.app-shell .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #7b1fa2, #ec407a 70%, #ff9800);
+  box-shadow: 0 8px 18px rgba(236, 64, 122, 0.4);
+  transition: transform 0.3s;
+}
+
+.brand:hover .brand-mark {
+  transform: rotate(-8deg) scale(1.06);
+}
+
+.brand-mark svg {
+  width: 30px;
+  height: 30px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brand-text strong {
+  font-size: 25px;
+  background: linear-gradient(90deg, #4a148c, #ad1457);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-text small {
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: #ef6c00;
+}
+
+/* Links */
+.app-shell .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-shell .nav-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4a148c;
+  text-decoration: none;
+  border-radius: 999px;
+  background: transparent;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.app-shell .nav-item:hover {
+  background: #f6e6fa;
+  color: #ad1457;
+  transform: translateY(-1px);
+}
+
+.app-shell .nav-item.active {
+  color: white;
+  background: linear-gradient(135deg, #7b1fa2, #ec407a);
+  box-shadow: 0 8px 18px rgba(236, 64, 122, 0.4);
+}
+
+/* Logout */
+.app-shell .nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #c2185b;
+  cursor: pointer;
+  border-radius: 999px;
+  background: white;
+  border: 1.5px solid #f06292;
+  transition: background 0.2s, color 0.2s;
+}
+
+.app-shell .nav-btn:hover {
+  color: white;
+  background: linear-gradient(135deg, #ec407a, #ff9800);
+  border-color: transparent;
+}
+
+/* Register button (logout aana nilai) */
+.app-shell .nav-cta {
+  margin-left: 8px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff9800, #ec407a);
+  box-shadow: 0 8px 18px rgba(236, 64, 122, 0.4);
+  transition: transform 0.2s;
+}
+
+.app-shell .nav-cta:hover {
+  transform: translateY(-2px);
+}
+
+/* Hamburger: desktop la maraichi */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: #6a1b9a;
+  cursor: pointer;
+  border-radius: 12px;
+  background: #f6e6fa;
+  border: none;
+}
+
+/* Mobile / tablet */
+@media (max-width: 900px) {
+  .app-shell .navbar {
+    height: 70px;
+    padding: 0 16px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-text strong {
+    font-size: 21px;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .app-shell .nav-links {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 12px;
+    right: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 14px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.28);
+  }
+
+  .app-shell .nav-links.open {
+    display: flex;
+  }
+
+  .app-shell .nav-item,
+  .app-shell .nav-btn,
+  .app-shell .nav-cta {
+    width: 100%;
+    margin: 0;
+    padding: 13px 18px;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    border-radius: 14px;
+  }
+
+  .app-shell .nav-cta {
+    justify-content: center;
+  }
+}
+
+/* ===== Navbar: dark purple gradient ===== */
+.app-shell .navbar {
+  background: linear-gradient(100deg, #2b0a4a 0%, #4a148c 55%, #7b1a6e 100%);
+  backdrop-filter: none;
+  box-shadow: 0 8px 24px rgba(43, 10, 74, 0.4);
+}
+
+.brand-text strong {
+  background: linear-gradient(90deg, #ffffff, #ffcc80);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-text small {
+  color: #ffb74d;
+}
+
+.app-shell .nav-item {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.app-shell .nav-item:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+}
+
+.app-shell .nav-btn {
+  color: white;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.nav-toggle {
+  color: white;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 900px) {
+  .app-shell .nav-links {
+    background: #2b0a4a;
+  }
+}
+
+/* ===== Navbar: strong hover color ===== */
+.app-shell .nav-item:hover {
+  color: white;
+  background: linear-gradient(135deg, #ff9800, #ec407a);
+  box-shadow: 0 8px 18px rgba(255, 152, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+/* Icon um hover la konjam perusaagum */
+.app-shell .nav-item:hover .nv-ico {
+  transform: scale(1.15);
+}
+
+.app-shell .nav-item .nv-ico {
+  transition: transform 0.2s;
+}
+
+/* Active page hover panna purple-pink ah irukkattum */
+.app-shell .nav-item.active:hover {
+  background: linear-gradient(135deg, #7b1fa2, #ec407a);
+  box-shadow: 0 8px 18px rgba(236, 64, 122, 0.4);
+}
+
+/* Smooth transition */
+.app-shell .nav-item {
+  transition: background 0.25s, color 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+
+/* ===== Navbar: transparent, page image clear ah theriyum ===== */
+.app-shell .navbar {
+  background: linear-gradient(
+    rgba(20, 5, 40, 0.5) 0%,
+    rgba(20, 5, 40, 0.28) 100%
+  );
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Text padikka easy ah */
+.app-shell .nav-item,
+.brand-text strong,
+.brand-text small {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+.brand-text strong {
+  background: none;
+  color: white;
+  -webkit-text-fill-color: white;
+}
+
+.brand-text small {
+  color: #ffcc80;
+}
+
+/* Mobile menu: solid, padikka easy */
+@media (max-width: 900px) {
+  .app-shell .nav-links {
+    background: rgba(43, 10, 74, 0.97);
+  }
+}
+
+/* ===== Home: hero image navbar pinnaadi varaikkum ===== */
+.app-shell {
+  position: relative;
+}
+
+/* Navbar hero mela float aagum (Home page la mattum) */
+.app-shell:has(.hero.hx) .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    rgba(20, 5, 40, 0.55) 0%,
+    rgba(20, 5, 40, 0.15) 100%
+  );
+  box-shadow: none;
+}
+
+.app-shell:has(.hero.hx) .navbar::after {
+  opacity: 0.8;
+}
+
+/* Hero top varaikkum, navbar ku idam vittu */
+.home .hero.hx {
+  margin-top: -40px;
+  padding-top: 170px;
+  min-height: 680px;
+}
+
+/* Navbar text white, image mela padikka */
+.app-shell:has(.hero.hx) .nav-item {
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.app-shell:has(.hero.hx) .nav-item.active {
+  background: linear-gradient(135deg, #7b1fa2, #ec407a);
+}
+
+.app-shell:has(.hero.hx) .nav-item:hover {
+  background: linear-gradient(135deg, #ff9800, #ec407a);
+}
+
+.app-shell:has(.hero.hx) .nav-btn {
+  color: white;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+.app-shell:has(.hero.hx) .brand-text strong {
+  background: none;
+  color: white;
+  -webkit-text-fill-color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.app-shell:has(.hero.hx) .brand-text small {
+  color: #ffcc80;
+}
+
+.app-shell:has(.hero.hx) .nav-toggle {
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 900px) {
+  .home .hero.hx {
+    padding-top: 130px;
+    min-height: 560px;
+  }
+}
+
+/* ===== Floating Back button ===== */
+.back-fab {
+  position: fixed;
+  left: 20px;
+  bottom: 22px;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px 12px 16px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7b1fa2, #ec407a 70%, #ff9800);
+  box-shadow: 0 12px 28px rgba(236, 64, 122, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.back-fab:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 16px 34px rgba(236, 64, 122, 0.6);
+}
+
+.back-fab .nv-ico {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile: chinna round button, text illama */
+@media (max-width: 600px) {
+  .back-fab {
+    left: 14px;
+    bottom: 16px;
+    padding: 14px;
+  }
+
+  .back-fab span {
+    display: none;
+  }
+}
+
+/* ===== Notification bell ===== */
+.bell {
+  position: relative;
+}
+
+.bell-btn {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 50%;
+}
+
+.bell-btn:hover {
+  background: #f3e5f5;
+}
+
+.bell-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #d81b60;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell-menu {
+  position: absolute;
+  right: 0;
+  top: 44px;
+  width: 300px;
+  max-height: 380px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  z-index: 50;
+}
+
+.bell-head {
+  padding: 12px 16px;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+}
+
+.bell-empty {
+  padding: 18px 16px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.bell-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: white;
+  border: none;
+  border-bottom: 1px solid #f1e8f7;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.bell-item:hover {
+  background: #faf5fd;
+}
+
+.bell-item.unread {
+  background: #f3e5f5;
+  font-weight: 600;
+}
+
+.bell-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+@media (max-width: 600px) {
+  .bell-menu {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 64px;
+    width: auto;
+  }
+}
+
+/* Bell position in the navbar */
+.bell-top {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 901px) {
+  .bell-top {
+    margin-left: 0;
+    order: 2;
+  }
+}
+
+/* ===== Navbar: menu bell pakkathula ===== */
+.app-shell .navbar {
+  gap: 14px;
+}
+
+/* Menu right side ku, bell oda serndhu */
+.app-shell .navbar .nav-links {
+  margin-left: auto;
+  margin-right: 0;
+  gap: 6px;
+}
+
+/* Bell: menu pakkathula, same height */
+.app-shell .navbar .nav-links + * {
+  margin-left: 0;
+  flex-shrink: 0;
+}
+
+/* Items konjam compact, 7 items ku idam kedaikka */
+@media (max-width: 1200px) {
+  .app-shell .nav-item {
+    padding: 9px 13px;
+    font-size: 14px;
+  }
+
+  .app-shell .nav-btn {
+    padding: 9px 15px;
+    font-size: 14px;
+  }
+}
+
+/* Mobile: brand left, bell and hamburger right */
+@media (max-width: 900px) {
+  .app-shell .navbar .nav-links {
+    margin-left: 0;
+  }
+
+  .app-shell .navbar .brand {
+    margin-right: auto;
+  }
+}

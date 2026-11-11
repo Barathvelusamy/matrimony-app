@@ -194,7 +194,7 @@ export default function Dashboard() {
             <div>
               <span className="dx-eyebrow">{greeting()}</span>
               <h1>{user.name}</h1>
-              <p className="dx-mail">{user.email}</p>
+              <p className="dx-mail">{user.username}</p>
               <div className="dx-badges">
                 <span className="dx-pill role">{user.role}</span>
                 {profile?.status && (

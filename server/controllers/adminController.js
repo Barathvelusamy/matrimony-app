@@ -3,7 +3,7 @@ const Profile = require("../models/Profile");
 exports.getProfilesByStatus = async (req, res) => {
   try {
     const status = req.query.status || "pending";
-    const profiles = await Profile.find({ status }).populate("user", "name email");
+    const profiles = await Profile.find({ status }).populate("user", "name email username");
     res.json({ total: profiles.length, profiles });
   } catch (err) {
     res.status(500).json({ message: "Server error" });

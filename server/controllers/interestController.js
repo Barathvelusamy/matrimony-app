@@ -1,11 +1,16 @@
 const Interest = require("../models/Interest");
 const Profile = require("../models/Profile");
+const User = require("../models/User");
+const Notification = require("../models/Notification");
+
+const notify = (user, type, message) =>
+  Notification.create({ user, type, message }).catch(() => {});
 
 const attachProfiles = async (interests, key) => {
   const valid = interests.filter((i) => i[key]);
   const ids = valid.map((i) => i[key]._id);
   const profiles = await Profile.find({ user: { $in: ids } }).select(
-       "user photo city state education occupation dateOfBirth religion community star height about"
+    "user photo city education occupation dateOfBirth"
   );
 
   const map = {};
@@ -39,6 +44,14 @@ exports.sendInterest = async (req, res) => {
     }
 
     const interest = await Interest.create({ from: req.user.id, to: toUser });
+
+    const me = await User.findById(req.user.id).select("name");
+    await notify(
+      toUser,
+      "interest_received",
+      `${me?.name || "Someone"} sent you an interest`
+    );
+
     res.status(201).json({ message: "Interest sent", interest });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
@@ -82,6 +95,13 @@ exports.respondToInterest = async (req, res) => {
 
     interest.status = status;
     await interest.save();
+
+    const me = await User.findById(req.user.id).select("name");
+    await notify(
+      interest.from,
+      status === "accepted" ? "interest_accepted" : "interest_rejected",
+      `${me?.name || "Someone"} ${status} your interest`
+    );
 
     res.json({ message: `Interest ${status}`, interest });
   } catch (err) {

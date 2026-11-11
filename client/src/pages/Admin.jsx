@@ -56,7 +56,7 @@ export default function Admin() {
             </div>
             <div className="interest-info">
               <h4>{p.user?.name}</h4>
-              <p className="muted">{p.user?.email}</p>
+              <p className="muted">{p.user?.email || (p.user?.username ? "@" + p.user.username : "")}</p>
               <p className="muted">
                 {p.gender} | {p.education} | {p.city}
               </p>
